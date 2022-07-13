@@ -29,7 +29,7 @@ async function init() {
   updateAllCards()
   // On every user loading the app, check every 35 seconds for updates to the cards
   // This will need to change when you have more users...
-  setInterval(updateAllCards, 350000)
+  setInterval(updateAllCards, 35000)
 
 }
 
