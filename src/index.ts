@@ -20,6 +20,7 @@ async function init() {
   });
 
   updateAllCards()
+  setInterval(updateAllCards, 350000)
 
 }
 
