@@ -1,3 +1,6 @@
+// Convert fields array on the card object to a set of key/value pairs in JSON
+// This uses the convention of ": " as a string split, left side of the split is the key, right is value
+// There's no way currently to create a 'proper' key value store against it 
 export const cardFieldsToJson = async (card: any) => {
     var cardArray = []
     card.fields.forEach((entry: Object) => {
@@ -9,29 +12,40 @@ export const cardFieldsToJson = async (card: any) => {
     return Object.fromEntries(entryMap) 
 }
 
+// Update all cards with current data from reddit
 export const updateAllCards = async () => {
-    const all_cards = await miro.board.get({
-        type: ['app_card'],
-      });
-    
-      const fetcher = await fetch('https://www.reddit.com/r/all.json')
-      const reddit_json=await fetcher.json()
-    
-      console.log(reddit_json.data.children)
-    
-      all_cards.forEach(async (card) => {
-        const fields = await cardFieldsToJson(card)
-        console.dir(fields)
-        const idx = parseInt(fields["ID"])
-        console.log(idx)
-        let permalink = reddit_json.data.children[idx].data.permalink
-        let upVotes = reddit_json.data.children[idx].data.ups
-        card.title = reddit_json.data.children[idx].data.title
-        card.fields = []
-        card.fields.push({value: "URL: " + permalink})
-        card.fields.push({value: "ID: " + idx})
-        card.fields.push({value: "Upvotes: " + upVotes})
-        card.status = 'connected'
-        card.sync()
-      })
+
+  // Get all app_cards on the board
+  // This should be improved to only get App Cards we created
+  const all_cards = await miro.board.get({
+      type: ['app_card'],
+  });
+  
+  // Pull top links in JSON format from r/all
+  const fetcher = await fetch('https://www.reddit.com/r/all.json')
+  const reddit_json=await fetcher.json()
+  // Iterate through all App Cards
+  all_cards.forEach(async (card) => {
+    // Convert the fields of the App Card to JSON
+    const fields = await cardFieldsToJson(card)
+    // Retrieve the index field
+    const idx = parseInt(fields["ID"])
+    // Retrieve the reddit result for the index of the app card
+    // Permalink => /r/all/somethingsomething
+    let permalink = reddit_json.data.children[idx].data.permalink
+    // Current upvotes for the reddit post
+    let upVotes = reddit_json.data.children[idx].data.ups
+    // Set the card title to the post title
+    card.title = reddit_json.data.children[idx].data.title
+    // Reset the card fields
+    card.fields = []
+    // Add back the ID, URL and Upvotes
+    card.fields.push({value: "URL: " + permalink})
+    card.fields.push({value: "ID: " + idx})
+    card.fields.push({value: "Upvotes: " + upVotes})
+    // Default state of an app card is disconnected, set to connected instead
+    card.status = 'connected'
+    // Sync the changes
+    card.sync()
+  })
 }

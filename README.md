@@ -1,14 +1,9 @@
-## Create a Miro app
+## Reddit Top Posts
 
-**&nbsp;ℹ&nbsp;Note**:
+**&nbsp;ℹ&nbsp;A note**:
 
-- We recommend a Chromium-based web browser for local development with HTTP. \
-  Safari enforces HTTPS; therefore, it doesn't allow localhost through HTTP.
-- All examples use `npm` as a package manager and `npx` as a package runner. \
-  If you prefer, you can install and use equivalent alternatives, such as `yarn`
-  or `pnpm`.
-- For more information, visit our
-  [developer documentation](https://developers.miro.com).
+- This is a demo app to show how to work with App Cards \
+  The purpose of this is a POC, use at your own risk.
 
 ### How to start locally
 
@@ -29,20 +24,6 @@
   This generates a static output inside `dist/`, which you can host on a static hosting
   service.
 
-### Folder structure
-
-<!-- The following tree structure is just an example -->
-
-```
-.
-├── src
-│  ├── assets
-│  │  └── style.css
-│  ├── app.js      // The code for the app lives here
-│  └── index.js    // The code for the app entry point lives here
-├── app.html       // The app itself. It's loaded on the board inside the 'appContainer'
-└── index.html     // The app entry point. This is what you specify in the 'App URL' box in the Miro app settings
-```
 
 ### About the app
 
