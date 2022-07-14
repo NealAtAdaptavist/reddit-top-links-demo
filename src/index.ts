@@ -7,7 +7,12 @@ async function init() {
 
   // Listen for a click on your app icon and open /app when clicked
   miro.board.ui.on('icon:click', async () => {
-    await miro.board.ui.openPanel({url: 'app.html'});
+    await miro.board.ui.openModal({
+      url: 'app.html',
+      width: 800,
+      height: 600,
+      fullscreen: false,
+    });
   });
   // Listen for a click on *any* app card 
   miro.board.ui.on('app_card:open', async (event) => {
