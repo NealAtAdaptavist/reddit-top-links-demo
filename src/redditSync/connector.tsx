@@ -19,30 +19,33 @@
       type: ['app_card'],
     });
     // Pull top links in JSON format from r/all
-    const fetcher = await fetch('https://www.reddit.com/r/all.json');
-    const reddit_json = await fetcher.json();
-    // Iterate through all App Cards
+    // // Iterate through all App Cards
     all_cards.forEach(async (card) => {
-      // Convert the fields of the App Card to JSON
+    //   // Convert the fields of the App Card to JSON
       const fields = await cardFieldsToJson(card);
-      // Retrieve the index field
-      const idx = parseInt(fields['ID']);
-      // Retrieve the reddit result for the index of the app card
-      // Permalink => /r/all/somethingsomething
-      let permalink = reddit_json.data.children[idx].data.permalink;
-      // Current upvotes for the reddit post
-      let upVotes = reddit_json.data.children[idx].data.ups;
-      // Set the card title to the post title
-      card.title = reddit_json.data.children[idx].data.title;
-      // Reset the card fields
+      console.log(fields)
+      let idx = fields["ID"]
+    //   // Retrieve the index field
+      const fetcher = await fetch('https://api.reddit.com/api/info/?id='+fields["ID"]);
+      console.log(fetcher.status)
+      const reddit_json = await fetcher.json();
+      console.dir(reddit_json)
+    //   // Retrieve the reddit result for the index of the app card
+    //   // Permalink => /r/all/somethingsomething
+      let permalink = reddit_json.data.children[0].data.permalink;
+    //   // Current upvotes for the reddit post
+      let upVotes = reddit_json.data.children[0].data.ups;
+    //   // Set the card title to the post title
+      card.title = reddit_json.data.children[0].data.title;
+    //   // Reset the card fields
       card.fields = [];
       // Add back the ID, URL and Upvotes
       card.fields.push({ value: 'URL: ' + permalink });
       card.fields.push({ value: 'ID: ' + idx });
       card.fields.push({ value: 'Upvotes: ' + upVotes });
       // Default state of an app card is disconnected, set to connected instead
-      card.status = 'connected';
-      // Sync the changes
+    //   card.status = 'connected';
+    //   // Sync the changes
       card.sync();
     });
   };
@@ -75,4 +78,5 @@
         //   },
       ],
     });
+    updateAllCards()
   };

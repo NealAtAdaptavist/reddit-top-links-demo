@@ -19,14 +19,12 @@ function App() {
   const [selectedResults, setSelectedResults] = React.useState([]);
 
   const search = async (query: any) => {
-    // console.log(query);
-    const queryString = `https://www.reddit.com/r/all/search.json?q=${query}&restrict_sr=off&sort=relevance&t=all`;
+    const queryString = `https://www.reddit.com/r/all/search.json?q=${query}&restrict_sr=off&sort=relevance&t=link&limit=5`;
     const fetcher = await fetch(queryString, {
       method: 'GET',
     });
     // console.log(fetcher.status);
     const jsonResponse = await fetcher.json();
-    // console.log(jsonResponse);
     setCards(jsonResponse.data.children);
   };
 
@@ -48,47 +46,41 @@ function App() {
     }
   };
 
+  const renderButton = () => {
+    return <button 
+    type="submit"          
+    >Add to Board</button>
+  }
+
   return (
     <div>
+      <h1>Search for Reddit Posts</h1>
       <form
         onSubmit={(e: any) => {
           e.preventDefault();
-          search(e.target.value);
+          search(e.target[0].value);
         }}
-      >
-        <label>Search</label>
+      >        
         <input type="text" />
         <button type="submit">Search</button>
       </form>
       <div>
         <form onSubmit={handleSubmit}>
-          <button type="submit">Add</button>
+          {
+             cards.length > 0 ? renderButton() : null
+          }
           {cards.map((card, i) => {
             console.log(card.data);
             return (
-              <div key={card.data.id}>
+              <div key={card.data.name}>
                 <div>{card.data?.title}</div>
                 <div>
-                  <input id={card.data.id} type="checkbox" onChange={handleOnChange} />
+                  <input id={card.data.name} type="checkbox" onChange={handleOnChange} />
                 </div>
               </div>
             );
           })}
         </form>
-      </div>
-      <div>
-        <button className="button button-primary" onClick={addNewRedditCard}>
-          Add another Card
-        </button>
-      </div>
-      <br />
-      <div>
-        <button
-          className="button button-primary"
-          onClick={updateAllCards} //Manually update cards on board
-        >
-          Update Card Details
-        </button>
       </div>
     </div>
   );

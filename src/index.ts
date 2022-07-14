@@ -9,8 +9,8 @@ async function init() {
   miro.board.ui.on('icon:click', async () => {
     await miro.board.ui.openModal({
       url: 'app.html',
-      width: 600,
-      height: 400,
+      width: 800,
+      height: 600,
       fullscreen: false,
     });
   });
