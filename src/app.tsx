@@ -34,6 +34,7 @@ function App() {
     selectedResults.forEach((result) => {
       createRedditCard(result);
     });
+    miro.board.ui.closeModal()
   };
 
   const handleOnChange = (e: any) => {
