@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { updateAllCards,createRedditCard } from './redditSync/connector';
-import './index.css'
+import './assets/index.css'
 
 
 // Listen for button click, then count the number of app cards on the board
@@ -37,6 +37,7 @@ function App() {
     selectedResults.forEach((result) => {
       createRedditCard(result);
     });
+    updateAllCards()
     miro.board.ui.closeModal()
   };
 
@@ -76,7 +77,9 @@ function App() {
       </form>
       <div>
         <form onSubmit={handleSubmit} >
-          
+        {
+             cards.length > 0 ? renderButton() : null
+        }  
           {cards.map((card, i) => {
             console.log(card.data.name);
             
@@ -86,10 +89,7 @@ function App() {
                 <div>{card.data?.title}</div>
               </div>
             );
-          })}
-          {
-             cards.length > 0 ? renderButton() : null
-          }
+          })}        
         </form>
       </div>
     </div>
